@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import redis
 import psycopg2
 
-app = FastAPI()
+app = FastAPI(title="API Python Basic", description="A basic API using FastAPI, PostgreSQL, and Redis", version="1.0.0")
 
 
 @app.get("/")
