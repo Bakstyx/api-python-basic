@@ -1,0 +1,28 @@
+[project]
+name = "api-python-basic"
+version = "0.1.0"
+description = "API template whit connection to a database and a redis-cache to improve performance"
+authors = [
+    {name = "Bakstyx",email = "bakstyx.012@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi (>=0.116.1,<0.117.0)",
+    "redis (>=6.2.0,<7.0.0)",
+    "psycopg2-binary (>=2.9.10,<3.0.0)",
+    "uvicorn (>=0.35.0,<0.36.0)"
+]
+
+[tool.poetry]
+packages = [{ include = "app" }]
+
+[tool.poetry.group.dev.dependencies]
+fastapi = "^0.116.1"
+psycopg2-binary = "^2.9.10"
+redis = "^6.2.0"
+uvicorn = "^0.35.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
