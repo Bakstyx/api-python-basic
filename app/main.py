@@ -9,10 +9,29 @@ load_dotenv(dotenv_path="../.env")
 app = FastAPI(title="API Python Basic", description="A basic API using FastAPI, PostgreSQL, and Redis", version="1.0.0")
 
 
+print("Environment variables loaded")
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/secrets")
+def read_secrets():
+    db_host = os.getenv("DB_HOST")
+    db_name = os.getenv("DB_NAME")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    redis_host = os.getenv("REDIS_HOST", "redis")
+    redis_port = os.getenv("REDIS_PORT", 6379)
+    
+    return {
+        "DB_HOST": db_host,
+        "DB_NAME": db_name,
+        "DB_USER": db_user,
+        "DB_PASSWORD": db_password,
+        "REDIS_HOST": redis_host,
+        "REDIS_PORT": redis_port
+    }
 
 @app.get("/pg")
 def pg_status():
@@ -26,7 +45,7 @@ def pg_status():
     cur.execute("SELECT 1")
     result = cur.fetchone()
     conn.close()
-    return {"PostgreSQL": result[0]}
+    return {"PostgreSQL": result}
 
 
 @app.get("/redis")
@@ -36,4 +55,5 @@ def redis_status():
         port=int(os.getenv("REDIS_PORT", 6379)))
     r.set("key", "value")
     val = r.get("key")
-    return {"Redis": val.decode()}
+    return {"Redis": val#.decode()
+            }
