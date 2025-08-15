@@ -1,40 +1,60 @@
-version: "3.10"
+#version: "3.10"
 
 services:
   api:
     build: .
+    container_name: my_api
     ports:
       - "8000:8000"
     depends_on:
       - db
       - redis
-#    volumes:
-#      - ./app:/app
+    volumes:
+      - app:/app
     environment:
       - DB_HOST=${DB_HOST}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
-      - REDIS_HOST=${REDIS_HOST}
+    networks:
+      - backend_net
 
   db:
-    image: postgres:15
+    image: postgres:16
+    container_name: postgres_db
     ports:
       - "5432:5433"
     environment:
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - REDIS_HOST=${REDIS_HOST}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_net
 
   redis:
     image: redis:7
+    container_name: redis_cache
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend_net
     ports:
       - "6379:6379"
 
 volumes:
   pgdata:
+    driver: local
+  redis_data:
+    driver: local
+  app:
+    driver: local
+
+networks:
+  backend_net:
+    driver: bridge
 

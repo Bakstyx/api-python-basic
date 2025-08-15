@@ -29,24 +29,29 @@ def read_secrets():
         "DB_NAME": db_name,
         "DB_USER": db_user,
         "DB_PASSWORD": db_password,
+        "DB_PORT": os.getenv("DB_PORT"),
         "REDIS_HOST": redis_host,
-        "REDIS_PORT": redis_port
+        "REDIS_PORT": redis_port,
     }
 
 @app.get("/pg")
 def pg_status():
-    conn = psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        dbname=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD"),
-    )
-    cur = conn.cursor()
-    cur.execute("SELECT 1")
-    result = cur.fetchone()
-    conn.close()
-    return {"PostgreSQL": result}
-
+    try:
+        conn = psycopg2.connect(
+            host=os.getenv("DB_HOST"),
+            dbname=os.getenv("DB_NAME"),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            port=int(os.getenv("DB_PORT", 5432)),
+            connect_timeout=3
+        )
+        cur = conn.cursor()
+        cur.execute("SELECT 1")
+        result = cur.fetchone()
+        conn.close()
+        return {"PostgreSQL": result}
+    except Exception as e:
+        return {"error": f"Could not connect to PostgreSQL: {str(e)}"}
 
 @app.get("/redis")
 def redis_status():
