@@ -21,15 +21,16 @@ def read_secrets():
     db_name = os.getenv("DB_NAME")
     db_user = os.getenv("DB_USER")
     db_password = os.getenv("DB_PASSWORD")
-    redis_host = os.getenv("REDIS_HOST", "redis")
-    redis_port = os.getenv("REDIS_PORT", 6379)
+    db_port = os.getenv("DB_PORT")  # Default to 5432 if not set
+    redis_host = os.getenv("REDIS_HOST")
+    redis_port = os.getenv("REDIS_PORT")
     
     return {
         "DB_HOST": db_host,
         "DB_NAME": db_name,
         "DB_USER": db_user,
         "DB_PASSWORD": db_password,
-        "DB_PORT": os.getenv("DB_PORT"),
+        "DB_PORT": db_port,
         "REDIS_HOST": redis_host,
         "REDIS_PORT": redis_port,
     }

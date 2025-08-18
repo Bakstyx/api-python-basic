@@ -3,6 +3,15 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Docker volumes
+#  If you are using Docker, you might want to ignore the volumes created by Docker Compose
+#  to avoid committing large files or directories that are not relevant to your codebase.
+#  This is especially useful if you are using Docker for development and have large databases
+#  or other data that you do not want to include in your version control.   
+api_data/
+redis_data/
+pgdata/
+
 # C extensions
 *.so
 
